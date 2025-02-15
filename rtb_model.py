@@ -42,7 +42,7 @@ df = df[df['out_class'] != 2]
 
 #create model class
 class Model(nn.Module):
-  def __init__(self, in_features=2, h1=8, h2=9, out_features=2):
+  def __init__(self, in_features=6, h1=8, h2=9, out_features=2):
     super().__init__()
     self.fc1 = nn.Linear(in_features, h1)
     self.fc2 = nn.Linear(h1, h2)
@@ -55,7 +55,7 @@ class Model(nn.Module):
     return x
 
 
-interesting_columns = [x for x in list(df.columns.values) if (x in ["Part49_gm", "Part49_wm", "Part76_gm", "Part76_wm", "Part106_gm", "Part106_wm", "out_class"])]
+interesting_columns = [x for x in list(df.columns.values) if (x in ["Part49_gm", "Part49_wm", "Part76_gm", "Part76_wm", "Part130_gm", "Part130_wm", "out_class"])]
 df = df[interesting_columns]
 
 #get ready for train test split
@@ -68,8 +68,9 @@ pd.set_option('display.width', 1000)
 print(df.describe())
 
 #train test split
-torch.manual_seed(32)
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=32)
+rseed=32
+torch.manual_seed(rseed)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=rseed)
 
 #convert X features to float tensors
 X_train = torch.FloatTensor(X_train)
@@ -87,10 +88,10 @@ model = Model(in_features=in_feat)
 #set criterion to measure loss
 criterion = nn.CrossEntropyLoss()
 #choose adamax optimizer (good with noisy data)
-optimizer = torch.optim.Adamax(model.parameters(), lr=0.0005)
+optimizer = torch.optim.Adamax(model.parameters(), lr=0.00052)
 
 #train model
-epochs = 160000
+epochs = 100000
 losses = []
 for i in range(epochs):
     y_pred = model.forward(X_train)
@@ -106,7 +107,7 @@ for i in range(epochs):
     optimizer.step()
 
     #print losses
-    if (i % 10000 == 0) and (i != 0):
+    if (i % 5000 == 0) and (i != 0):
         print(f'Epoch: {i} Loss: {loss}')
         with torch.no_grad():
             y_eval = model.forward(X_train)
