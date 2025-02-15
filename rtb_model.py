@@ -55,7 +55,7 @@ class Model(nn.Module):
     return x
 
 
-interesting_columns = [x for x in list(df.columns.values) if (x in ["Part49_gm", "Part49_wm", "Part76_gm", "Part76_wm", "Part130_gm", "Part130_wm", "out_class"])]
+interesting_columns = [x for x in list(df.columns.values) if (x in ["Part49_gm", "Part49_wm", "Part106_gm", "Part106_wm", "Part130_gm", "Part130_wm", "out_class"])]
 df = df[interesting_columns]
 
 #get ready for train test split
@@ -88,10 +88,10 @@ model = Model(in_features=in_feat)
 #set criterion to measure loss
 criterion = nn.CrossEntropyLoss()
 #choose adamax optimizer (good with noisy data)
-optimizer = torch.optim.Adamax(model.parameters(), lr=0.00052)
+optimizer = torch.optim.Adamax(model.parameters(), lr=0.00065)
 
 #train model
-epochs = 100000
+epochs = 90000
 losses = []
 for i in range(epochs):
     y_pred = model.forward(X_train)
