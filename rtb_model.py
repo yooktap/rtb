@@ -42,7 +42,7 @@ df = df[df['out_class'] != 2]
 
 #create model class
 class Model(nn.Module):
-  def __init__(self, in_features=2, h1=8, h2=9, out_features=2):
+  def __init__(self, in_features=6, h1=8, h2=9, out_features=2):
     super().__init__()
     self.fc1 = nn.Linear(in_features, h1)
     self.fc2 = nn.Linear(h1, h2)
